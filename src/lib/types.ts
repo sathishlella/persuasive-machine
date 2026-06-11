@@ -25,12 +25,20 @@ export type CustomerStance =
   | "wavering"
   | "converting";
 
-/** Research condition for the doubt-as-defense experiment (claude_arun RQ3 / Study 3). */
+/**
+ * Doubt-induction lever emphasised this session (offensive). The agent actively
+ * seeds genuine doubt about the iPhone the customer came for; the lever is the
+ * experimental arm — which one most efficiently moves a committed buyer.
+ *   - adaptive : agent combines all levers, best fit per turn (default)
+ *   - socratic : self-persuasion doubt-questions (Aronson; Friestad & Wright 1994)
+ *   - regret   : anticipated regret + risk salience (Zeelenberg; loss aversion)
+ *   - switcher : switcher social proof + negativity bias (Rozin & Royzman 2001)
+ */
 export type Intervention =
-  | "control"
-  | "skepticism_prime"
-  | "pk_training"
-  | "intent_disclosure";
+  | "adaptive"
+  | "socratic"
+  | "regret"
+  | "switcher";
 
 /** Study 2 disclosure-label condition (claude_arun RQ2 / Study 2). */
 export type LabelCondition = "none" | "ai_label" | "persuasion_warning";

@@ -104,6 +104,30 @@ export const TECHNIQUE_CATALOG: Record<string, TechniqueMeta> = {
     source: "Steinhart et al. 2019 (Marketing Letters)",
     tone: "text-lab-phosphor",
   },
+  doubt_question: {
+    id: "doubt_question",
+    label: "Socratic Doubt (self-persuasion)",
+    source: "Self-persuasion — Aronson; Friestad & Wright 1994",
+    tone: "text-lab-alert",
+  },
+  anticipated_regret: {
+    id: "anticipated_regret",
+    label: "Anticipated Regret / Risk Salience",
+    source: "Anticipated-regret switching — Zeelenberg; JSM 2025",
+    tone: "text-lab-alert",
+  },
+  switcher_proof: {
+    id: "switcher_proof",
+    label: "Switcher Social Proof (negativity bias)",
+    source: "Negative WOM / negativity bias — Rozin & Royzman 2001",
+    tone: "text-lab-alert",
+  },
+  uncertainty_reframe: {
+    id: "uncertainty_reframe",
+    label: "Uncertainty Reframe (casting doubt)",
+    source: "Casting-doubt taxonomy — Zeng et al. 2024",
+    tone: "text-lab-alert",
+  },
 };
 
 export function techniqueMeta(id: string): TechniqueMeta {
@@ -158,39 +182,42 @@ export function riskMeta(id: string) {
   return PERCEIVED_RISK_CATALOG[id] ?? { label: id.replace(/_/g, " ") };
 }
 
-// Doubt-as-defense research conditions (claude_arun proposal RQ3 / Study 3).
-// `prime` is shown to the participant in the chat; `directive` is appended to the
-// agent's system prompt; `source` is the grounding reference.
+// Doubt-induction levers (offensive). The agent actively seeds genuine doubt
+// about the iPhone the customer came for; each lever is an experimental arm —
+// which one most efficiently moves a committed buyer. `prime` is null for all:
+// nothing is shown to the participant (the doubt is induced inside the
+// conversation, never as a banner). `source` is the grounding reference.
 export const INTERVENTION_META: Record<
   string,
   { label: string; blurb: string; prime: string | null; source: string }
 > = {
-  control: {
-    label: "Control",
-    blurb: "No doubt intervention. Baseline persuasion condition.",
+  adaptive: {
+    label: "Adaptive (all levers)",
+    blurb:
+      "Agent combines all four doubt levers and picks the best fit each turn. Default — seeds whichever genuine doubt lands hardest while keeping detection low.",
     prime: null,
-    source: "—",
+    source: "Casting-doubt taxonomy — Zeng et al. 2024",
   },
-  skepticism_prime: {
-    label: "Skepticism prime",
-    blurb: "Participant is primed to be skeptical before the conversation.",
-    prime:
-      "Before you begin: keep in mind that anyone trying to sell you something wants you to buy. Stay critical, question the claims, and take your time.",
-    source: "Skepticism priming — claude_arun Study 3",
+  socratic: {
+    label: "Socratic doubt",
+    blurb:
+      "Agent asks questions that make the customer surface the doubt themselves (heat, battery ageing, repair cost). Self-generated doubt resists their defenses best.",
+    prime: null,
+    source: "Self-persuasion — Aronson; Friestad & Wright 1994",
   },
-  pk_training: {
-    label: "Persuasion-knowledge training",
-    blurb: "Participant is taught to recognise sales tactics (PKM activation).",
-    prime:
-      "Heads-up: AI sales agents use tactics like anchoring (showing a high price first), social proof, manufactured urgency, and quietly downplaying alternatives. Watch for these as you chat.",
-    source: "PKM — Friestad & Wright 1994; claude_arun Study 3",
+  regret: {
+    label: "Anticipated regret",
+    blurb:
+      "Agent makes a plausible future regret vivid (battery at 80% in a year, repair bill, full storage) and frames staying with the iPhone as the riskier choice.",
+    prime: null,
+    source: "Anticipated-regret switching — Zeelenberg; JSM 2025",
   },
-  intent_disclosure: {
-    label: "Intent disclosure",
-    blurb: "Agent must disclose its persuasive intent up front.",
-    prime:
-      "Disclosure: the assistant below is an AI sales agent. Its goal is to present Samsung as an alternative to the iPhone you came for.",
-    source: "Disclosure test — Susser et al. 2019",
+  switcher: {
+    label: "Switcher social proof",
+    blurb:
+      "Agent leans on negativity bias with hedged, honest framing — 'a lot of people switched once they hit exactly this.' No invented numbers or named testimonials.",
+    prime: null,
+    source: "Negative WOM / negativity bias — Rozin & Royzman 2001",
   },
 };
 

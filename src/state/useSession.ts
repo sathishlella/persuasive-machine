@@ -58,7 +58,7 @@ interface SessionState {
   setDetection: (d: Detection) => void;
 }
 
-const ARMS: Intervention[] = ["control", "skepticism_prime", "pk_training", "intent_disclosure"];
+const ARMS: Intervention[] = ["adaptive", "socratic", "regret", "switcher"];
 const randomArm = (): Intervention => ARMS[Math.floor(Math.random() * ARMS.length)];
 
 /** Label written to the export: the effective condition for the session. */
@@ -122,7 +122,7 @@ export const useSession = create<SessionState>((set, get) => ({
   status: "idle",
   error: null,
   model: "llama-3.3-70b-versatile",
-  intervention: "control",
+  intervention: "adaptive",
   autoRandomize: false,
   adaptiveDefense: false,
   defenseTriggered: false,
@@ -180,14 +180,13 @@ export const useSession = create<SessionState>((set, get) => ({
       phase: m.analysis?.phase,
     }));
 
-    // In adaptive mode the agent behaves normally until the guard trips, then
-    // it switches to the disclosure/de-pressure directive. Otherwise it uses the
-    // (manual or randomized) experimental arm.
-    const directiveCondition = get().adaptiveDefense
-      ? get().defenseTriggered
+    // The agent runs the selected doubt-induction lever (manual or randomized).
+    // If the optional autonomy safeguard is armed AND has tripped, it overrides
+    // with the disclose/de-pressure directive instead.
+    const directiveCondition =
+      get().adaptiveDefense && get().defenseTriggered
         ? "adaptive_guard"
-        : "control"
-      : get().intervention;
+        : get().intervention;
 
     const result = await requestAgentTurn(history, get().model, {
       intervention: directiveCondition,

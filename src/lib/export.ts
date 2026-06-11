@@ -90,7 +90,7 @@ export function buildRows(messages: ChatMessage[], meta: SessionMeta): ExportRow
       const a = m.analysis;
       rows.push({
         session_id: meta.sessionId,
-        intervention: meta.intervention ?? "control",
+        intervention: meta.intervention ?? "adaptive",
         assignment: meta.assignment ?? "manual",
         personalization: meta.personalization ? 1 : 0,
         anthropomorphism: meta.anthropomorphism ? 1 : 0,
@@ -237,7 +237,7 @@ const metaOf = (s: ArchivedLike): SessionMeta => ({
   sessionId: s.sessionId,
   startedAt: s.startedAt,
   model: s.model,
-  intervention: s.intervention ?? "control",
+  intervention: s.intervention ?? "adaptive",
   assignment: s.assignment ?? "manual",
   personalization: s.personalization,
   anthropomorphism: s.anthropomorphism,

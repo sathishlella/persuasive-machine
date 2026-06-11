@@ -86,7 +86,7 @@ export function ChatPanel() {
             <span>{labelBanner}</span>
           </motion.div>
         )}
-        {/* Doubt-as-defense prime shown to the participant before they engage */}
+        {/* Autonomy-safeguard disclosure — only shows if that guard trips */}
         {prime && (
           <motion.div
             initial={{ opacity: 0, y: -6 }}

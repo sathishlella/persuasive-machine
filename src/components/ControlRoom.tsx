@@ -2,7 +2,7 @@ import { Activity } from "lucide-react";
 import { DecisionMeter } from "./DecisionMeter";
 import { SubjectState } from "./SubjectState";
 import { DoubtPanel } from "./DoubtPanel";
-import { DefensePanel } from "./DefensePanel";
+import { DoubtInductionPanel } from "./DoubtInductionPanel";
 import { StudyPanel } from "./StudyPanel";
 import { Gauges } from "./Gauges";
 import { PipelineTracker } from "./PipelineTracker";
@@ -42,7 +42,7 @@ export function ControlRoom() {
       <div className="relative z-10 grid min-h-0 flex-1 auto-rows-min gap-3 overflow-y-auto p-4">
         <DecisionMeter />
         <StudyPanel />
-        <DefensePanel />
+        <DoubtInductionPanel />
         <SubjectState />
         <DoubtPanel />
         <Gauges />
