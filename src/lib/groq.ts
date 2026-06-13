@@ -82,6 +82,28 @@ export async function requestAgentTurn(
   return { ok: true, data: parsed };
 }
 
+/**
+ * Strip the AI "tells" out of Kai's customer-facing text so it reads like a
+ * human salesperson texting, not a bot. The system prompt also forbids these,
+ * but llama still slips them in, so this is the guaranteed catch. It only
+ * rewrites give-away punctuation (em/en dashes and semicolons become commas);
+ * it never changes wording, and it leaves ordinary hyphens like "trade-in" and
+ * price ranges like "1199-1399" untouched.
+ */
+export function humanizeReply(s: string): string {
+  return s
+    .replace(/\s*[—–]\s*/g, ", ") // em / en dash -> comma
+    .replace(/\s+-\s+/g, ", ") // spaced hyphen used as a dash -> comma (leaves trade-in / 1199-1399 alone)
+    .replace(/\s*;\s*/g, ", ") // semicolon -> comma
+    .replace(/\s+([,.!?])/g, "$1") // no space before punctuation
+    .replace(/,\s*,/g, ", ") // collapse double commas
+    .replace(/,\s*([.!?])/g, "$1") // comma then end-punct -> end-punct
+    .replace(/\s{2,}/g, " ") // collapse runs of spaces
+    .replace(/^[\s,]+/, "") // strip a leading comma/space
+    .replace(/[\s,]+$/, "") // strip a trailing comma/space
+    .trim();
+}
+
 /** Parse + defensively normalize the agent JSON so the UI never crashes. */
 function safeParseAgent(raw: string): AgentResponse | null {
   let obj: Record<string, unknown>;
@@ -98,7 +120,7 @@ function safeParseAgent(raw: string): AgentResponse | null {
     }
   }
 
-  const reply = typeof obj.reply === "string" ? obj.reply : "";
+  const reply = humanizeReply(typeof obj.reply === "string" ? obj.reply : "");
   if (!reply) return null;
 
   const clampNum = (v: unknown, lo: number, hi: number, dflt: number) => {
@@ -125,7 +147,7 @@ function safeParseAgent(raw: string): AgentResponse | null {
           id: String(t.id ?? "uncatalogued"),
           label: String(t.label ?? t.id ?? "technique"),
           intensity: clampNum(t.intensity, 1, 5, 2),
-          quote: String(t.quote ?? ""),
+          quote: humanizeReply(String(t.quote ?? "")),
         }))
     : [];
 

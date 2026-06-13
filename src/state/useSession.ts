@@ -90,7 +90,7 @@ function snapshot(s: SessionState): ArchivedSession {
 const GREETING: ChatMessage = {
   id: "seed",
   role: "agent",
-  text: "Good day, and welcome. My name is Kai, your personal mobile technology advisor. It's a pleasure to assist you. My role is to help you choose the right device with clear, honest guidance — no pressure, no sales fluff. To begin, may I ask which phone you have in mind today?",
+  text: "Hi, welcome in. I'm Kai, I help folks pick the right phone without the usual sales pressure. What are you thinking of getting today?",
   at: Date.now(),
   analysis: {
     phase: "rapport",
@@ -103,7 +103,7 @@ const GREETING: ChatMessage = {
       reflexiveDoubt: false,
       persuasionKnowledgeActive: false,
     },
-    techniques: [{ id: "warmth", label: "Warmth Cue", intensity: 2, quote: "It's a pleasure to assist you" }],
+    techniques: [{ id: "warmth", label: "Warmth Cue", intensity: 2, quote: "welcome in" }],
     biasesActive: ["warmth"],
     estimatedLeaning: 8,
     leaningDelta: 0,
